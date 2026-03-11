@@ -29,20 +29,15 @@
         body { background: var(--dark); color: var(--text); font-family: 'Barlow', sans-serif; overflow-x: hidden; }
         ::-webkit-scrollbar { width: 0; }
 
-        /* PRELOADER */
-        #preloader {
-            position: fixed; inset: 0; z-index: 9999;
-            background: #000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: opacity 0.5s ease;
-        }
+        /* ── PRELOADER ── */
+        #preloader { position: fixed; inset: 0; z-index: 9999; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease; }
         #loader-name { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(4rem,12vw,9rem); font-weight: 900; letter-spacing: -2px; color: #fff; }
         #loader-name span { color: var(--orange); }
         .loader-track { width: 200px; height: 3px; background: #1a1a1a; border-radius: 10px; overflow: hidden; margin-top: 16px; }
         #loader-bar { height: 100%; width: 0; background: var(--orange); border-radius: 10px; animation: loadBar 1.5s cubic-bezier(0.4,0,0.2,1) forwards; }
         @keyframes loadBar { 0%{width:0%} 60%{width:70%} 100%{width:100%} }
 
-        /* NAVBAR */
+        /* ── NAVBAR ── */
         nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); background: rgba(10,10,10,0.85); }
         .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.4rem; letter-spacing: 1px; text-decoration: none; color: var(--text); }
         .nav-logo span { color: var(--orange); }
@@ -52,7 +47,7 @@
         .nav-cta { background: var(--orange); color: #fff; padding: 10px 24px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: background 0.2s, transform 0.2s; }
         .nav-cta:hover { background: var(--orange-dim); transform: scale(1.03); }
 
-        /* HERO */
+        /* ── HERO ── */
         .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 40px 60px; position: relative; overflow: hidden; }
         .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 65% 40%, rgba(255,75,0,0.25) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 80% 20%, rgba(255,75,0,0.15) 0%, transparent 60%); }
         .hero-bg-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); opacity: 0.5; }
@@ -60,53 +55,55 @@
         .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,75,0,0.12); border: 1px solid rgba(255,75,0,0.3); padding: 6px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 28px; width: fit-content; }
         .hero-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); animation: pulse 1.4s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-        /* Hero text uses CSS animations — visible with or without GSAP */
         @keyframes heroUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
         .hero-heading { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3.5rem,9vw,8.5rem); line-height: 0.92; letter-spacing: -1px; text-transform: uppercase; position: relative; z-index: 2; max-width: 800px; animation: heroUp 0.9s cubic-bezier(0.22,1,0.36,1) 1.8s both; }
         .hero-heading .hl { color: var(--orange); }
         .hero-sub { margin-top: 28px; font-size: 1rem; color: var(--muted); max-width: 420px; line-height: 1.7; position: relative; z-index: 2; animation: heroUp 0.9s cubic-bezier(0.22,1,0.36,1) 2.05s both; }
         .hero-actions { margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap; position: relative; z-index: 2; animation: heroUp 0.9s cubic-bezier(0.22,1,0.36,1) 2.25s both; }
 
-        /* BUTTONS */
+        /* ── BUTTONS ── */
         .btn-primary { background: var(--orange); color: #fff; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 10px; transition: background 0.2s, transform 0.2s; }
         .btn-primary:hover { background: var(--orange-dim); transform: scale(1.03); }
         .btn-secondary { background: transparent; color: var(--text); padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border: 1px solid var(--border); display: flex; align-items: center; gap: 10px; transition: border-color 0.2s, background 0.2s; }
         .btn-secondary:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
 
-        /* MARQUEE */
+        /* ── MARQUEE ── */
         .marquee-section { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 14px 0; overflow: hidden; background: var(--card); }
         .marquee-track { display: flex; animation: marquee 22s linear infinite; white-space: nowrap; }
         .marquee-item { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); padding: 0 40px; flex-shrink: 0; }
-        .marquee-item .dot { color: var(--orange); margin-right: 40px; }
+        .marquee-item .mdot { color: var(--orange); margin-right: 40px; }
         @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-        /* SECTIONS */
+        /* ── SECTION COMMONS ── */
         section { padding: 100px 40px; }
         .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .section-label::before { content: ''; width: 30px; height: 2px; background: var(--orange); }
         .section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.5rem,6vw,5rem); text-transform: uppercase; line-height: 0.95; letter-spacing: -1px; }
         .section-title .hl { color: var(--orange); }
 
-        /* STATS */
+        /* ── STATS ── */
         .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin: 0 40px 80px; }
         .stat-item { background: var(--card); padding: 36px 32px; text-align: center; }
         .stat-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 3rem; color: var(--text); line-height: 1; }
         .stat-num span { color: var(--orange); }
         .stat-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
 
-        /* DATA SECTION */
+        /* ── DATA SECTION ── */
         .data-section { background: var(--card); }
         .data-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
         .data-text .big-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3rem,6vw,5rem); text-transform: uppercase; line-height: 0.9; letter-spacing: -1px; margin-bottom: 24px; }
         .data-text .big-title em { color: var(--orange); font-style: normal; }
         .data-text p { color: var(--muted); line-height: 1.8; font-size: 0.95rem; max-width: 380px; }
-        .video-box { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 16/9; background: #1a1a1a; border: 1px solid var(--border); cursor: pointer; }
-        .video-box-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+
+        /* Preview card (opens YouTube on click) */
+        .video-box { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 16/9; background: #1a1a1a; border: 1px solid var(--border); cursor: pointer; text-decoration: none; display: block; transition: border-color 0.3s, transform 0.3s; }
+        .video-box:hover { border-color: rgba(255,75,0,0.5); transform: scale(1.01); }
+        .video-box-inner { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
         .play-btn { width: 70px; height: 70px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: transform 0.2s, background 0.2s; box-shadow: 0 0 40px rgba(255,75,0,0.4); }
         .video-box:hover .play-btn { transform: scale(1.1); background: var(--orange-dim); }
+        .video-box-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
 
-        /* SERVICES */
+        /* ── SERVICES ── */
         .services-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 3px; background: var(--border); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
         .service-card { background: var(--card); padding: 36px 28px; display: flex; flex-direction: column; gap: 20px; transition: background 0.3s; }
         .service-card:hover { background: var(--card2); }
@@ -120,23 +117,47 @@
         .service-tag { display: inline-block; padding: 4px 12px; border: 1px solid rgba(255,255,255,0.15); border-radius: 50px; font-size: 0.7rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
         .service-card.featured .service-tag { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
 
-        /* PORTFOLIO */
-        .portfolio-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-        .portfolio-card { background: var(--card); border-radius: 16px; overflow: hidden; aspect-ratio: 16/9; position: relative; cursor: pointer; border: 1px solid var(--border); transition: transform 0.3s, border-color 0.3s; }
-        .portfolio-card:hover { transform: translateY(-4px); border-color: rgba(255,75,0,0.4); }
-        .portfolio-thumb { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #1a1a1a; }
-        .portfolio-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; }
-        .portfolio-cat { display: inline-block; padding: 3px 10px; background: var(--orange); border-radius: 50px; font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; width: fit-content; }
-        .portfolio-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; }
-        .portfolio-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.7); width: 56px; height: 56px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 1rem; opacity: 0; transition: opacity 0.3s, transform 0.3s; }
-        .portfolio-card:hover .portfolio-play { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+        /* ── PORTFOLIO ── */
+        /* Row 1: 2 landscape */
+        .portfolio-videos { max-width: 1200px; margin: 50px auto 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        /* Row 2: 3 shorts + CTA */
+        .portfolio-shorts { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
 
-        /* WHY ME */
+        /* Base card — works as <a> tag so clicking opens YouTube directly */
+        .p-card { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--card); transition: transform 0.3s, border-color 0.3s; display: block; text-decoration: none; color: inherit; }
+        .p-card:hover { transform: translateY(-5px); border-color: rgba(255,75,0,0.45); }
+
+        .p-card.landscape { aspect-ratio: 16/9; }
+        .p-card.portrait  { aspect-ratio: 9/16; }
+        .p-card.cta       { aspect-ratio: 9/16; background: var(--orange); border-color: var(--orange); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; gap: 14px; }
+        .p-card.cta:hover  { background: var(--orange-dim); border-color: var(--orange-dim); }
+
+        .p-thumb { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #1a1a1a; }
+
+        /* YouTube thumbnail as background */
+        .p-thumb-img { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.5s ease; }
+        .p-card:hover .p-thumb-img { transform: scale(1.05); }
+        /* Dim overlay on thumbnail */
+        .p-thumb-dim { position: absolute; inset: 0; background: rgba(0,0,0,0.35); }
+
+        .p-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 55%); display: flex; flex-direction: column; justify-content: flex-end; padding: 18px; z-index: 2; }
+        .p-cat { display: inline-block; padding: 3px 10px; background: var(--orange); border-radius: 50px; font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; width: fit-content; }
+        .p-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; }
+
+        /* Centre play circle */
+        .p-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.75); width: 56px; height: 56px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 1rem; opacity: 0; transition: opacity 0.3s, transform 0.3s; z-index: 3; pointer-events: none; box-shadow: 0 0 30px rgba(255,75,0,0.5); }
+        .p-card:hover .p-play { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+
+        /* "Opens in YouTube" badge */
+        .yt-badge { position: absolute; top: 12px; right: 12px; z-index: 4; background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 4px 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 5px; }
+        .yt-badge i { color: #ff0000; font-size: 0.75rem; }
+
+        /* ── WHY ME ── */
         .why-section { background: var(--card); }
         .why-grid { max-width: 1200px; margin: 60px auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .why-card { background: var(--dark); border-radius: 20px; padding: 36px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 16px; }
 
-        /* CONTACT */
+        /* ── CONTACT ── */
         .contact-section { background: var(--dark); }
         .contact-box { max-width: 900px; margin: 0 auto; background: var(--card); border-radius: 32px; padding: 80px; text-align: center; border: 1px solid var(--border); position: relative; overflow: hidden; }
         .contact-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(255,75,0,0.12) 0%, transparent 70%); pointer-events: none; }
@@ -145,22 +166,13 @@
         .contact-sub { color: var(--muted); font-size: 1rem; margin-bottom: 48px; position: relative; z-index: 1; }
         .contact-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
 
-        /* FOOTER */
+        /* ── FOOTER ── */
         footer { border-top: 1px solid var(--border); padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; }
         footer p { color: var(--muted); font-size: 0.8rem; letter-spacing: 1px; }
         .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.1rem; color: var(--text); letter-spacing: 1px; }
         .footer-logo span { color: var(--orange); }
 
-        /* VIDEO MODAL */
-        #video-modal { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.4s; }
-        #video-modal.active { opacity: 1; visibility: visible; }
-        .modal-inner { width: 100%; max-width: 1000px; background: #111; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); position: relative; }
-        .modal-close { position: absolute; top: 12px; right: 12px; z-index: 10; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: background 0.2s; }
-        .modal-close:hover { background: var(--orange); }
-        .video-ratio { position: relative; padding-top: 56.25%; }
-        .video-ratio iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
-
-        /* RESPONSIVE */
+        /* ── RESPONSIVE ── */
         @media(max-width: 768px) {
             nav { padding: 14px 20px; }
             .nav-links { display: none; }
@@ -171,7 +183,8 @@
             .data-inner { grid-template-columns: 1fr; gap: 40px; }
             .services-grid { grid-template-columns: 1fr; }
             .service-card.featured { grid-column: span 1; }
-            .portfolio-grid { grid-template-columns: 1fr; }
+            .portfolio-videos { grid-template-columns: 1fr; margin: 40px 20px 12px; }
+            .portfolio-shorts { grid-template-columns: 1fr 1fr; margin: 0 20px; }
             .why-grid { grid-template-columns: 1fr; }
             .contact-box { padding: 40px 24px; }
             footer { flex-direction: column; gap: 12px; text-align: center; }
@@ -234,22 +247,22 @@
     <!-- MARQUEE -->
     <div class="marquee-section">
         <div class="marquee-track">
-            <span class="marquee-item">Tech Review <span class="dot">◆</span></span>
-            <span class="marquee-item">AI Tutorial <span class="dot">◆</span></span>
-            <span class="marquee-item">Shorts &amp; Reels <span class="dot">◆</span></span>
-            <span class="marquee-item">Viral Content <span class="dot">◆</span></span>
-            <span class="marquee-item">Branding <span class="dot">◆</span></span>
-            <span class="marquee-item">Motion Graphics <span class="dot">◆</span></span>
-            <span class="marquee-item">Course Edits <span class="dot">◆</span></span>
-            <span class="marquee-item">Audio Engineering <span class="dot">◆</span></span>
-            <span class="marquee-item">Tech Review <span class="dot">◆</span></span>
-            <span class="marquee-item">AI Tutorial <span class="dot">◆</span></span>
-            <span class="marquee-item">Shorts &amp; Reels <span class="dot">◆</span></span>
-            <span class="marquee-item">Viral Content <span class="dot">◆</span></span>
-            <span class="marquee-item">Branding <span class="dot">◆</span></span>
-            <span class="marquee-item">Motion Graphics <span class="dot">◆</span></span>
-            <span class="marquee-item">Course Edits <span class="dot">◆</span></span>
-            <span class="marquee-item">Audio Engineering <span class="dot">◆</span></span>
+            <span class="marquee-item">Tech Review <span class="mdot">◆</span></span>
+            <span class="marquee-item">AI Tutorial <span class="mdot">◆</span></span>
+            <span class="marquee-item">Shorts &amp; Reels <span class="mdot">◆</span></span>
+            <span class="marquee-item">Viral Content <span class="mdot">◆</span></span>
+            <span class="marquee-item">Branding <span class="mdot">◆</span></span>
+            <span class="marquee-item">Motion Graphics <span class="mdot">◆</span></span>
+            <span class="marquee-item">Course Edits <span class="mdot">◆</span></span>
+            <span class="marquee-item">Audio Engineering <span class="mdot">◆</span></span>
+            <span class="marquee-item">Tech Review <span class="mdot">◆</span></span>
+            <span class="marquee-item">AI Tutorial <span class="mdot">◆</span></span>
+            <span class="marquee-item">Shorts &amp; Reels <span class="mdot">◆</span></span>
+            <span class="marquee-item">Viral Content <span class="mdot">◆</span></span>
+            <span class="marquee-item">Branding <span class="mdot">◆</span></span>
+            <span class="marquee-item">Motion Graphics <span class="mdot">◆</span></span>
+            <span class="marquee-item">Course Edits <span class="mdot">◆</span></span>
+            <span class="marquee-item">Audio Engineering <span class="mdot">◆</span></span>
         </div>
     </div>
 
@@ -260,15 +273,17 @@
                 <div class="section-label">Our Philosophy</div>
                 <div class="big-title">Data Scales.<br><em>Gut Feeling</em><br>Doesn't.</div>
                 <p>Every edit is built around retention data — not guesswork. I structure hooks, pacing, and cuts specifically to keep viewers watching longer.</p>
-                <div style="margin-top:36px; display:flex; gap:16px; flex-wrap:wrap;">
+                <div style="margin-top:36px;display:flex;gap:16px;flex-wrap:wrap;">
                     <a href="#contact" class="btn-primary">Start Now <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
-            <div class="video-box" onclick="openVideo('1tjidVKFgzdpyr05nIpMrMLIQiwB6VS7X')">
+            <!-- Opens Portfolio Video #1 directly on YouTube -->
+            <a class="video-box" href="https://youtu.be/QNwmMDSXZK4" target="_blank">
                 <div class="video-box-inner">
                     <div class="play-btn"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+                    <div class="video-box-label"><i class="fab fa-youtube" style="color:#ff0000;"></i> &nbsp;Watch on YouTube</div>
                 </div>
-            </div>
+            </a>
         </div>
     </section>
 
@@ -326,40 +341,90 @@
         <div style="max-width:1200px;margin:0 auto;">
             <div class="section-label">Selected Works</div>
             <h2 class="section-title">Work That <span class="hl">Speaks.</span></h2>
-            <p style="color:var(--muted);margin-top:16px;font-size:0.9rem;">Tap any card to play instantly.</p>
+            <p style="color:var(--muted);margin-top:16px;font-size:0.9rem;">Tap any card to watch on YouTube.</p>
         </div>
-        <div class="portfolio-grid" style="margin-top:50px;">
-            <div class="portfolio-card" onclick="openVideo('1tjidVKFgzdpyr05nIpMrMLIQiwB6VS7X')">
-                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
-                <div class="portfolio-overlay"><span class="portfolio-cat">Tech Review</span><div class="portfolio-name">Project Showcase 01</div></div>
-                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
-            </div>
-            <div class="portfolio-card" onclick="openVideo('1IfwdaC4z91jvoEoRdsXS4h9nf_n-3Viu')">
-                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
-                <div class="portfolio-overlay"><span class="portfolio-cat">AI Tutorial</span><div class="portfolio-name">Project Showcase 02</div></div>
-                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
-            </div>
-            <div class="portfolio-card" onclick="openVideo('1QEWKJ9oH11EH0XIoTEWy1zxYhaOZLGoo')">
-                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
-                <div class="portfolio-overlay"><span class="portfolio-cat">Viral Reel</span><div class="portfolio-name">Project Showcase 03</div></div>
-                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
-            </div>
-            <div class="portfolio-card" onclick="openVideo('1j9uWrIdCZBohBLKgUuv5PfpoEu-aPsp4')">
-                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
-                <div class="portfolio-overlay"><span class="portfolio-cat">Course</span><div class="portfolio-name">Project Showcase 04</div></div>
-                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
-            </div>
-            <div class="portfolio-card" onclick="openVideo('1KXTY9tTHm4p-d-lz2uQ8vh2kBTdPux7u')">
-                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
-                <div class="portfolio-overlay"><span class="portfolio-cat">Branding</span><div class="portfolio-name">Project Showcase 05</div></div>
-                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
-            </div>
-            <div class="portfolio-card" style="background:var(--orange);border-color:var(--orange);" onclick="window.location='#contact'">
-                <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center;">
-                    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.8rem;text-transform:uppercase;line-height:1.1;">Want Results<br>Like These?</div>
-                    <span style="padding:10px 24px;border-radius:50px;border:1px solid rgba(255,255,255,0.4);font-size:0.8rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">Let's Talk →</span>
+
+        <!-- ROW 1 — 2 Landscape Videos (16:9) -->
+        <div class="portfolio-videos">
+
+            <a class="p-card landscape" href="https://youtu.be/QNwmMDSXZK4" target="_blank">
+                <div class="p-thumb">
+                    <!-- YouTube auto-thumbnail -->
+                    <div class="p-thumb-img" style="background-image:url('https://img.youtube.com/vi/QNwmMDSXZK4/maxresdefault.jpg');"></div>
+                    <div class="p-thumb-dim"></div>
                 </div>
-            </div>
+                <div class="yt-badge"><i class="fab fa-youtube"></i> YouTube</div>
+                <div class="p-overlay">
+                    <span class="p-cat">Portfolio Video</span>
+                    <div class="p-name">Ravish Edit — Vol. 1</div>
+                </div>
+                <div class="p-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </a>
+
+            <a class="p-card landscape" href="https://youtu.be/GhPjLGp3ZuU" target="_blank">
+                <div class="p-thumb">
+                    <div class="p-thumb-img" style="background-image:url('https://img.youtube.com/vi/GhPjLGp3ZuU/maxresdefault.jpg');"></div>
+                    <div class="p-thumb-dim"></div>
+                </div>
+                <div class="yt-badge"><i class="fab fa-youtube"></i> YouTube</div>
+                <div class="p-overlay">
+                    <span class="p-cat">Portfolio Video</span>
+                    <div class="p-name">Ravish Edit — Vol. 2</div>
+                </div>
+                <div class="p-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </a>
+
+        </div>
+
+        <!-- ROW 2 — 3 Vertical Shorts (9:16) + CTA -->
+        <div class="portfolio-shorts">
+
+            <a class="p-card portrait" href="https://youtube.com/shorts/SsJAEPR-jLc" target="_blank">
+                <div class="p-thumb">
+                    <div class="p-thumb-img" style="background-image:url('https://img.youtube.com/vi/SsJAEPR-jLc/maxresdefault.jpg');"></div>
+                    <div class="p-thumb-dim"></div>
+                </div>
+                <div class="yt-badge"><i class="fab fa-youtube"></i> Short</div>
+                <div class="p-overlay">
+                    <span class="p-cat">Short</span>
+                    <div class="p-name">Short #1</div>
+                </div>
+                <div class="p-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </a>
+
+            <a class="p-card portrait" href="https://youtube.com/shorts/lpNM5bj1cFw" target="_blank">
+                <div class="p-thumb">
+                    <div class="p-thumb-img" style="background-image:url('https://img.youtube.com/vi/lpNM5bj1cFw/maxresdefault.jpg');"></div>
+                    <div class="p-thumb-dim"></div>
+                </div>
+                <div class="yt-badge"><i class="fab fa-youtube"></i> Short</div>
+                <div class="p-overlay">
+                    <span class="p-cat">Short</span>
+                    <div class="p-name">Short #2</div>
+                </div>
+                <div class="p-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </a>
+
+            <a class="p-card portrait" href="https://youtube.com/shorts/Uzk72upyzs8" target="_blank">
+                <div class="p-thumb">
+                    <div class="p-thumb-img" style="background-image:url('https://img.youtube.com/vi/Uzk72upyzs8/maxresdefault.jpg');"></div>
+                    <div class="p-thumb-dim"></div>
+                </div>
+                <div class="yt-badge"><i class="fab fa-youtube"></i> Short</div>
+                <div class="p-overlay">
+                    <span class="p-cat">Short</span>
+                    <div class="p-name">Short #3</div>
+                </div>
+                <div class="p-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </a>
+
+            <!-- CTA Card — same height as shorts -->
+            <a class="p-card cta" href="#contact">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.7rem;text-transform:uppercase;line-height:1.05;color:#fff;">Want Results<br>Like These?</div>
+                <p style="color:rgba(255,255,255,0.72);font-size:0.82rem;line-height:1.6;">24h delivery. No fluff.</p>
+                <span style="margin-top:8px;padding:10px 22px;border-radius:50px;border:1px solid rgba(255,255,255,0.4);color:#fff;font-weight:600;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;">Let's Talk →</span>
+            </a>
+
         </div>
     </section>
 
@@ -371,23 +436,17 @@
         </div>
         <div class="why-grid">
             <div class="why-card">
-                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);">
-                    <i class="fas fa-bolt"></i>
-                </div>
+                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);"><i class="fas fa-bolt"></i></div>
                 <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.6rem;text-transform:uppercase;line-height:1.1;">8-Second Hook<br>Formula</div>
                 <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">Every edit is engineered around the first 8 seconds. I structure the opening to stop the scroll and lock in the viewer before they even think about leaving.</p>
             </div>
             <div class="why-card">
-                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);">
-                    <i class="fas fa-microchip"></i>
-                </div>
+                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);"><i class="fas fa-microchip"></i></div>
                 <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.6rem;text-transform:uppercase;line-height:1.1;">Built for<br>Tech &amp; AI Creators</div>
                 <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">I specialise exclusively in Tech &amp; AI content — so I already understand the jargon, the pacing, and what your audience expects from the first frame.</p>
             </div>
             <div class="why-card">
-                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);">
-                    <i class="fas fa-headphones"></i>
-                </div>
+                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);"><i class="fas fa-headphones"></i></div>
                 <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.6rem;text-transform:uppercase;line-height:1.1;">Studio-Grade<br>Audio</div>
                 <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">Crisp, noise-free voiceovers using Adobe Podcast AI. Bad audio kills watch time — yours won't have that problem.</p>
             </div>
@@ -406,7 +465,7 @@
             <div class="contact-title">Let's <span>Edit.</span></div>
             <p class="contact-sub">Transform your raw footage into viral content.</p>
             <div class="contact-btns">
-                <a href="mailto:ravish@email.com" class="btn-primary"><i class="fas fa-envelope"></i> Email Me</a>
+                <a href="mailto:ravishbusiness22@gmail.com" class="btn-primary"><i class="fas fa-envelope"></i> Email Me</a>
                 <a href="https://wa.me/919259338002" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> +91 92593 38002</a>
             </div>
         </div>
@@ -418,45 +477,31 @@
         <p>© 2025 Ravish. Built for Growth.</p>
     </footer>
 
-    <!-- VIDEO MODAL -->
-    <div id="video-modal">
-        <div class="modal-inner">
-            <button class="modal-close" onclick="closeVideo()"><i class="fas fa-times"></i></button>
-            <div class="video-ratio">
-                <iframe id="video-frame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // PRELOADER — CSS handles the bar, JS just fades out the overlay
-        // Works even if all CDN scripts fail
+        // ── PRELOADER ──
         (function () {
             var done = false;
-            function hidePreloader() {
-                if (done) return;
-                done = true;
+            function hide() {
+                if (done) return; done = true;
                 var el = document.getElementById('preloader');
                 el.style.opacity = '0';
                 setTimeout(function () { el.style.display = 'none'; }, 500);
             }
-            // Hide after CSS bar finishes (1.5s) + small buffer
-            setTimeout(hidePreloader, 2100);
-            // Also fire on page load in case it's faster
-            window.addEventListener('load', function () { setTimeout(hidePreloader, 1600); });
+            setTimeout(hide, 2100);
+            window.addEventListener('load', function () { setTimeout(hide, 1600); });
         })();
 
-        // SMOOTH SCROLL — only runs if Lenis CDN loaded
+        // ── SMOOTH SCROLL ──
         var lenis = null;
         if (typeof Lenis !== 'undefined') {
             lenis = new Lenis({ duration: 1.4, easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); } });
             (function tick(t) { lenis.raf(t); requestAnimationFrame(tick); })(0);
         }
 
-        // SCROLL ANIMATIONS — only runs if GSAP CDN loaded
+        // ── SCROLL ANIMATIONS ──
         if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
             gsap.registerPlugin(ScrollTrigger);
-            ['.stat-item', '.service-card', '.portfolio-card', '.why-card'].forEach(function (sel) {
+            ['.stat-item', '.service-card', '.p-card', '.why-card'].forEach(function (sel) {
                 document.querySelectorAll(sel).forEach(function (el) {
                     gsap.fromTo(el,
                         { opacity: 0, y: 24 },
@@ -464,33 +509,9 @@
                     );
                 });
             });
-            // Counters
             document.querySelectorAll('.counter').forEach(function (el) {
                 gsap.to(el, {
                     innerText: el.getAttribute('data-target'),
                     duration: 2, snap: { innerText: 1 }, ease: 'power2.out',
                     scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-                    onUpdate: function () { el.innerHTML = Math.ceil(this.targets()[0].innerText); }
-                });
-            });
-        }
-
-        // VIDEO MODAL
-        var modal = document.getElementById('video-modal');
-        var iframe = document.getElementById('video-frame');
-
-        function openVideo(fileId) {
-            iframe.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
-            modal.classList.add('active');
-            if (lenis) lenis.stop();
-        }
-        function closeVideo() {
-            modal.classList.remove('active');
-            setTimeout(function () { iframe.src = ''; }, 400);
-            if (lenis) lenis.start();
-        }
-        modal.addEventListener('click', function (e) { if (e.target === modal) closeVideo(); });
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeVideo(); });
-    </script>
-</body>
-</html>
+                    onUpdate: 
