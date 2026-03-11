@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ravish | Video Editor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --orange: #FF4B00;
+            --orange-dim: #cc3c00;
+            --dark: #0a0a0a;
+            --card: #111111;
+            --card2: #161616;
+            --text: #ffffff;
+            --muted: #888888;
+            --border: rgba(255,255,255,0.07);
+        }
+
+        html { scroll-behavior: smooth; }
+        body { background: var(--dark); color: var(--text); font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 0; }
+
+        /* PRELOADER */
+        #preloader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: #000; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        #loader-name { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(4rem,12vw,9rem); font-weight: 900; letter-spacing: -2px; color: #fff; }
+        #loader-name span { color: var(--orange); }
+        .loader-track { width: 200px; height: 3px; background: #1a1a1a; border-radius: 10px; overflow: hidden; margin-top: 16px; }
+        #loader-bar { height: 100%; width: 0; background: var(--orange); border-radius: 10px; animation: loadBar 1.5s cubic-bezier(0.4,0,0.2,1) forwards; }
+        @keyframes loadBar { 0%{width:0%} 60%{width:70%} 100%{width:100%} }
+
+        /* NAVBAR */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); background: rgba(10,10,10,0.85); }
+        .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.4rem; letter-spacing: 1px; text-decoration: none; color: var(--text); }
+        .nav-logo span { color: var(--orange); }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.85rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-cta { background: var(--orange); color: #fff; padding: 10px 24px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: background 0.2s, transform 0.2s; }
+        .nav-cta:hover { background: var(--orange-dim); transform: scale(1.03); }
+
+        /* HERO */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 40px 60px; position: relative; overflow: hidden; }
+        .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 65% 40%, rgba(255,75,0,0.25) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 80% 20%, rgba(255,75,0,0.15) 0%, transparent 60%); }
+        .hero-bg-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); opacity: 0.5; }
+        .hero-glyph { position: absolute; top: 50%; right: 8%; transform: translateY(-55%); font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(14rem,28vw,26rem); color: transparent; -webkit-text-stroke: 1px rgba(255,75,0,0.3); line-height: 1; pointer-events: none; background: linear-gradient(135deg, rgba(255,75,0,0.45) 0%, rgba(200,30,0,0.1) 60%, transparent 100%); -webkit-background-clip: text; background-clip: text; user-select: none; }
+        .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,75,0,0.12); border: 1px solid rgba(255,75,0,0.3); padding: 6px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 28px; width: fit-content; }
+        .hero-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); animation: pulse 1.4s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        /* Hero text uses CSS animations — visible with or without GSAP */
+        @keyframes heroUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        .hero-heading { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3.5rem,9vw,8.5rem); line-height: 0.92; letter-spacing: -1px; text-transform: uppercase; position: relative; z-index: 2; max-width: 800px; animation: heroUp 0.9s cubic-bezier(0.22,1,0.36,1) 1.8s both; }
+        .hero-heading .hl { color: var(--orange); }
+        .hero-sub { margin-top: 28px; font-size: 1rem; color: var(--muted); max-width: 420px; line-height: 1.7; position: relative; z-index: 2; animation: heroUp 0.9s cubic-bezier(0.22,1,0.36,1) 2.05s both; }
+        .hero-actions { margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap; position: relative; z-index: 2; animation: heroUp 0.9s cubic-bezier(0.22,1,0.36,1) 2.25s both; }
+
+        /* BUTTONS */
+        .btn-primary { background: var(--orange); color: #fff; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 10px; transition: background 0.2s, transform 0.2s; }
+        .btn-primary:hover { background: var(--orange-dim); transform: scale(1.03); }
+        .btn-secondary { background: transparent; color: var(--text); padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border: 1px solid var(--border); display: flex; align-items: center; gap: 10px; transition: border-color 0.2s, background 0.2s; }
+        .btn-secondary:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+
+        /* MARQUEE */
+        .marquee-section { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 14px 0; overflow: hidden; background: var(--card); }
+        .marquee-track { display: flex; animation: marquee 22s linear infinite; white-space: nowrap; }
+        .marquee-item { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); padding: 0 40px; flex-shrink: 0; }
+        .marquee-item .dot { color: var(--orange); margin-right: 40px; }
+        @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+        /* SECTIONS */
+        section { padding: 100px 40px; }
+        .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .section-label::before { content: ''; width: 30px; height: 2px; background: var(--orange); }
+        .section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.5rem,6vw,5rem); text-transform: uppercase; line-height: 0.95; letter-spacing: -1px; }
+        .section-title .hl { color: var(--orange); }
+
+        /* STATS */
+        .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin: 0 40px 80px; }
+        .stat-item { background: var(--card); padding: 36px 32px; text-align: center; }
+        .stat-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 3rem; color: var(--text); line-height: 1; }
+        .stat-num span { color: var(--orange); }
+        .stat-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+
+        /* DATA SECTION */
+        .data-section { background: var(--card); }
+        .data-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .data-text .big-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3rem,6vw,5rem); text-transform: uppercase; line-height: 0.9; letter-spacing: -1px; margin-bottom: 24px; }
+        .data-text .big-title em { color: var(--orange); font-style: normal; }
+        .data-text p { color: var(--muted); line-height: 1.8; font-size: 0.95rem; max-width: 380px; }
+        .video-box { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 16/9; background: #1a1a1a; border: 1px solid var(--border); cursor: pointer; }
+        .video-box-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .play-btn { width: 70px; height: 70px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: transform 0.2s, background 0.2s; box-shadow: 0 0 40px rgba(255,75,0,0.4); }
+        .video-box:hover .play-btn { transform: scale(1.1); background: var(--orange-dim); }
+
+        /* SERVICES */
+        .services-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 3px; background: var(--border); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+        .service-card { background: var(--card); padding: 36px 28px; display: flex; flex-direction: column; gap: 20px; transition: background 0.3s; }
+        .service-card:hover { background: var(--card2); }
+        .service-card.featured { grid-column: span 2; background: var(--orange); }
+        .service-card.featured:hover { background: var(--orange-dim); }
+        .service-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .service-card.featured .service-icon { background: rgba(0,0,0,0.2); }
+        .service-card-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.6rem; text-transform: uppercase; line-height: 1.1; }
+        .service-card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+        .service-card.featured .service-card-desc { color: rgba(255,255,255,0.7); }
+        .service-tag { display: inline-block; padding: 4px 12px; border: 1px solid rgba(255,255,255,0.15); border-radius: 50px; font-size: 0.7rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+        .service-card.featured .service-tag { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+
+        /* PORTFOLIO */
+        .portfolio-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+        .portfolio-card { background: var(--card); border-radius: 16px; overflow: hidden; aspect-ratio: 16/9; position: relative; cursor: pointer; border: 1px solid var(--border); transition: transform 0.3s, border-color 0.3s; }
+        .portfolio-card:hover { transform: translateY(-4px); border-color: rgba(255,75,0,0.4); }
+        .portfolio-thumb { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #1a1a1a; }
+        .portfolio-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; }
+        .portfolio-cat { display: inline-block; padding: 3px 10px; background: var(--orange); border-radius: 50px; font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; width: fit-content; }
+        .portfolio-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.2rem; text-transform: uppercase; }
+        .portfolio-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.7); width: 56px; height: 56px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 1rem; opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+        .portfolio-card:hover .portfolio-play { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+
+        /* WHY ME */
+        .why-section { background: var(--card); }
+        .why-grid { max-width: 1200px; margin: 60px auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .why-card { background: var(--dark); border-radius: 20px; padding: 36px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 16px; }
+
+        /* CONTACT */
+        .contact-section { background: var(--dark); }
+        .contact-box { max-width: 900px; margin: 0 auto; background: var(--card); border-radius: 32px; padding: 80px; text-align: center; border: 1px solid var(--border); position: relative; overflow: hidden; }
+        .contact-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(255,75,0,0.12) 0%, transparent 70%); pointer-events: none; }
+        .contact-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3rem,7vw,6rem); text-transform: uppercase; line-height: 0.9; margin-bottom: 20px; position: relative; z-index: 1; }
+        .contact-title span { color: var(--orange); }
+        .contact-sub { color: var(--muted); font-size: 1rem; margin-bottom: 48px; position: relative; z-index: 1; }
+        .contact-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+
+        /* FOOTER */
+        footer { border-top: 1px solid var(--border); padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; }
+        footer p { color: var(--muted); font-size: 0.8rem; letter-spacing: 1px; }
+        .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.1rem; color: var(--text); letter-spacing: 1px; }
+        .footer-logo span { color: var(--orange); }
+
+        /* VIDEO MODAL */
+        #video-modal { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.4s; }
+        #video-modal.active { opacity: 1; visibility: visible; }
+        .modal-inner { width: 100%; max-width: 1000px; background: #111; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+        .modal-close { position: absolute; top: 12px; right: 12px; z-index: 10; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: background 0.2s; }
+        .modal-close:hover { background: var(--orange); }
+        .video-ratio { position: relative; padding-top: 56.25%; }
+        .video-ratio iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+        /* RESPONSIVE */
+        @media(max-width: 768px) {
+            nav { padding: 14px 20px; }
+            .nav-links { display: none; }
+            .hero { padding: 0 20px 50px; }
+            .hero-glyph { display: none; }
+            section { padding: 70px 20px; }
+            .stats-bar { grid-template-columns: 1fr 1fr; margin: 0 20px 60px; }
+            .data-inner { grid-template-columns: 1fr; gap: 40px; }
+            .services-grid { grid-template-columns: 1fr; }
+            .service-card.featured { grid-column: span 1; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .why-grid { grid-template-columns: 1fr; }
+            .contact-box { padding: 40px 24px; }
+            footer { flex-direction: column; gap: 12px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div id="loader-name">RAVI<span>SH</span></div>
+        <div class="loader-track"><div id="loader-bar"></div></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <a href="#" class="nav-logo">Ravish<span>.Edit</span></a>
+        <ul class="nav-links">
+            <li><a href="#about">Profile</a></li>
+            <li><a href="#portfolio">Work</a></li>
+            <li><a href="#services">Services</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta">Hire Me <i class="fas fa-arrow-right"></i></a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="about">
+        <div class="hero-bg"></div>
+        <div class="hero-bg-grid"></div>
+        <div class="hero-glyph">R</div>
+        <div class="hero-tag"><span class="dot"></span>Available for Projects</div>
+        <h1 class="hero-heading">Visuals That<br><span class="hl">Retain</span><br>Attention.</h1>
+        <p class="hero-sub">High-end editing for Tech &amp; AI Creators.<br>Optimized for Watch Time. Engineered for Growth.</p>
+        <div class="hero-actions">
+            <a href="#portfolio" class="btn-primary">View Portfolio <i class="fas fa-arrow-right"></i></a>
+            <a href="https://wa.me/919259338002" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-num"><span class="counter" data-target="100">0</span><span>%</span></div>
+            <div class="stat-label">Niche Focus</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num"><span class="counter" data-target="8">0</span><span>s</span></div>
+            <div class="stat-label">Hook Cycle</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num"><span class="counter" data-target="24">0</span><span>h</span></div>
+            <div class="stat-label">Turnaround</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">Top<span> 1%</span></div>
+            <div class="stat-label">Quality</div>
+        </div>
+    </div>
+
+    <!-- MARQUEE -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <span class="marquee-item">Tech Review <span class="dot">◆</span></span>
+            <span class="marquee-item">AI Tutorial <span class="dot">◆</span></span>
+            <span class="marquee-item">Shorts &amp; Reels <span class="dot">◆</span></span>
+            <span class="marquee-item">Viral Content <span class="dot">◆</span></span>
+            <span class="marquee-item">Branding <span class="dot">◆</span></span>
+            <span class="marquee-item">Motion Graphics <span class="dot">◆</span></span>
+            <span class="marquee-item">Course Edits <span class="dot">◆</span></span>
+            <span class="marquee-item">Audio Engineering <span class="dot">◆</span></span>
+            <span class="marquee-item">Tech Review <span class="dot">◆</span></span>
+            <span class="marquee-item">AI Tutorial <span class="dot">◆</span></span>
+            <span class="marquee-item">Shorts &amp; Reels <span class="dot">◆</span></span>
+            <span class="marquee-item">Viral Content <span class="dot">◆</span></span>
+            <span class="marquee-item">Branding <span class="dot">◆</span></span>
+            <span class="marquee-item">Motion Graphics <span class="dot">◆</span></span>
+            <span class="marquee-item">Course Edits <span class="dot">◆</span></span>
+            <span class="marquee-item">Audio Engineering <span class="dot">◆</span></span>
+        </div>
+    </div>
+
+    <!-- DATA SCALES -->
+    <section class="data-section">
+        <div class="data-inner">
+            <div class="data-text">
+                <div class="section-label">Our Philosophy</div>
+                <div class="big-title">Data Scales.<br><em>Gut Feeling</em><br>Doesn't.</div>
+                <p>Every edit is built around retention data — not guesswork. I structure hooks, pacing, and cuts specifically to keep viewers watching longer.</p>
+                <div style="margin-top:36px; display:flex; gap:16px; flex-wrap:wrap;">
+                    <a href="#contact" class="btn-primary">Start Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="video-box" onclick="openVideo('1tjidVKFgzdpyr05nIpMrMLIQiwB6VS7X')">
+                <div class="video-box-inner">
+                    <div class="play-btn"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div style="max-width:1200px;margin:0 auto;">
+            <div class="section-label">What I Offer</div>
+            <h2 class="section-title">Strategy, Production,<br>Growth — <span class="hl">Covered.</span></h2>
+        </div>
+        <div style="max-width:1200px;margin:50px auto 0;">
+            <div class="services-grid">
+                <div class="service-card featured">
+                    <div class="service-icon"><i class="fas fa-microchip"></i></div>
+                    <div>
+                        <div class="service-card-title">Tech &amp; AI Storytelling</div>
+                        <div class="service-card-desc">Deep channel analysis, production optimization, and audience growth strategy until your numbers dominate.</div>
+                    </div>
+                    <div class="service-tag">Core Service</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-film"></i></div>
+                    <div>
+                        <div class="service-card-title">Full Content Creation &amp; Production</div>
+                        <div class="service-card-desc">From thumbnails to timelines, we handle full production and manage deadlines.</div>
+                    </div>
+                    <div class="service-tag">Production</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <div>
+                        <div class="service-card-title">Shorts &amp; Reels</div>
+                        <div class="service-card-desc">High-retention vertical edits designed to beat the algorithm every time.</div>
+                    </div>
+                    <div class="service-tag">Vertical</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-layer-group"></i></div>
+                    <div>
+                        <div class="service-card-title">My Stack</div>
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+                            <span style="padding:5px 12px;background:rgba(255,255,255,0.07);border-radius:8px;font-size:0.75rem;font-weight:600;border:1px solid var(--border);">Alight Motion</span>
+                            <span style="padding:5px 12px;background:rgba(255,255,255,0.07);border-radius:8px;font-size:0.75rem;font-weight:600;border:1px solid var(--border);">CapCut</span>
+                            <span style="padding:5px 12px;background:rgba(255,255,255,0.07);border-radius:8px;font-size:0.75rem;font-weight:600;border:1px solid var(--border);">Gemini</span>
+                            <span style="padding:5px 12px;background:rgba(255,255,255,0.07);border-radius:8px;font-size:0.75rem;font-weight:600;border:1px solid var(--border);">Adobe Podcast</span>
+                        </div>
+                    </div>
+                    <div class="service-tag">Tools</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section id="portfolio" style="background:var(--card);">
+        <div style="max-width:1200px;margin:0 auto;">
+            <div class="section-label">Selected Works</div>
+            <h2 class="section-title">Work That <span class="hl">Speaks.</span></h2>
+            <p style="color:var(--muted);margin-top:16px;font-size:0.9rem;">Tap any card to play instantly.</p>
+        </div>
+        <div class="portfolio-grid" style="margin-top:50px;">
+            <div class="portfolio-card" onclick="openVideo('1tjidVKFgzdpyr05nIpMrMLIQiwB6VS7X')">
+                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
+                <div class="portfolio-overlay"><span class="portfolio-cat">Tech Review</span><div class="portfolio-name">Project Showcase 01</div></div>
+                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </div>
+            <div class="portfolio-card" onclick="openVideo('1IfwdaC4z91jvoEoRdsXS4h9nf_n-3Viu')">
+                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
+                <div class="portfolio-overlay"><span class="portfolio-cat">AI Tutorial</span><div class="portfolio-name">Project Showcase 02</div></div>
+                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </div>
+            <div class="portfolio-card" onclick="openVideo('1QEWKJ9oH11EH0XIoTEWy1zxYhaOZLGoo')">
+                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
+                <div class="portfolio-overlay"><span class="portfolio-cat">Viral Reel</span><div class="portfolio-name">Project Showcase 03</div></div>
+                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </div>
+            <div class="portfolio-card" onclick="openVideo('1j9uWrIdCZBohBLKgUuv5PfpoEu-aPsp4')">
+                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
+                <div class="portfolio-overlay"><span class="portfolio-cat">Course</span><div class="portfolio-name">Project Showcase 04</div></div>
+                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </div>
+            <div class="portfolio-card" onclick="openVideo('1KXTY9tTHm4p-d-lz2uQ8vh2kBTdPux7u')">
+                <div class="portfolio-thumb"><i class="fas fa-play" style="font-size:2rem;color:rgba(255,255,255,0.15);"></i></div>
+                <div class="portfolio-overlay"><span class="portfolio-cat">Branding</span><div class="portfolio-name">Project Showcase 05</div></div>
+                <div class="portfolio-play"><i class="fas fa-play" style="margin-left:3px;color:#fff;"></i></div>
+            </div>
+            <div class="portfolio-card" style="background:var(--orange);border-color:var(--orange);" onclick="window.location='#contact'">
+                <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center;">
+                    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.8rem;text-transform:uppercase;line-height:1.1;">Want Results<br>Like These?</div>
+                    <span style="padding:10px 24px;border-radius:50px;border:1px solid rgba(255,255,255,0.4);font-size:0.8rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">Let's Talk →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY WORK WITH ME -->
+    <section class="why-section">
+        <div style="max-width:1200px;margin:0 auto;">
+            <div class="section-label">Why Work With Me</div>
+            <h2 class="section-title">Obsessed With <span class="hl">Every</span><br>Frame.</h2>
+        </div>
+        <div class="why-grid">
+            <div class="why-card">
+                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.6rem;text-transform:uppercase;line-height:1.1;">8-Second Hook<br>Formula</div>
+                <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">Every edit is engineered around the first 8 seconds. I structure the opening to stop the scroll and lock in the viewer before they even think about leaving.</p>
+            </div>
+            <div class="why-card">
+                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.6rem;text-transform:uppercase;line-height:1.1;">Built for<br>Tech &amp; AI Creators</div>
+                <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">I specialise exclusively in Tech &amp; AI content — so I already understand the jargon, the pacing, and what your audience expects from the first frame.</p>
+            </div>
+            <div class="why-card">
+                <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,75,0,0.15);border:1px solid rgba(255,75,0,0.3);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--orange);">
+                    <i class="fas fa-headphones"></i>
+                </div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.6rem;text-transform:uppercase;line-height:1.1;">Studio-Grade<br>Audio</div>
+                <p style="color:var(--muted);font-size:0.85rem;line-height:1.8;">Crisp, noise-free voiceovers using Adobe Podcast AI. Bad audio kills watch time — yours won't have that problem.</p>
+            </div>
+            <div class="why-card" style="background:var(--orange);border-color:var(--orange);justify-content:center;align-items:center;text-align:center;">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(2rem,4vw,3rem);text-transform:uppercase;line-height:0.95;margin-bottom:16px;">Ready to<br>Level Up?</div>
+                <p style="color:rgba(255,255,255,0.75);font-size:0.88rem;margin-bottom:28px;max-width:260px;line-height:1.6;">24h turnaround. No fluff. Just clean, scroll-stopping edits.</p>
+                <a href="#contact" style="padding:14px 32px;border-radius:50px;border:1px solid rgba(255,255,255,0.4);color:#fff;font-weight:600;font-size:0.9rem;letter-spacing:1px;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:10px;">Let's Talk →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="contact-box">
+            <div class="contact-glow"></div>
+            <div class="contact-title">Let's <span>Edit.</span></div>
+            <p class="contact-sub">Transform your raw footage into viral content.</p>
+            <div class="contact-btns">
+                <a href="mailto:ravish@email.com" class="btn-primary"><i class="fas fa-envelope"></i> Email Me</a>
+                <a href="https://wa.me/919259338002" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> +91 92593 38002</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">Ravish<span>.Edit</span></div>
+        <p>© 2025 Ravish. Built for Growth.</p>
+    </footer>
+
+    <!-- VIDEO MODAL -->
+    <div id="video-modal">
+        <div class="modal-inner">
+            <button class="modal-close" onclick="closeVideo()"><i class="fas fa-times"></i></button>
+            <div class="video-ratio">
+                <iframe id="video-frame" src="" frameborder="0" allow="autoplay; fullscreen"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PRELOADER — CSS handles the bar, JS just fades out the overlay
+        // Works even if all CDN scripts fail
+        (function () {
+            var done = false;
+            function hidePreloader() {
+                if (done) return;
+                done = true;
+                var el = document.getElementById('preloader');
+                el.style.opacity = '0';
+                setTimeout(function () { el.style.display = 'none'; }, 500);
+            }
+            // Hide after CSS bar finishes (1.5s) + small buffer
+            setTimeout(hidePreloader, 2100);
+            // Also fire on page load in case it's faster
+            window.addEventListener('load', function () { setTimeout(hidePreloader, 1600); });
+        })();
+
+        // SMOOTH SCROLL — only runs if Lenis CDN loaded
+        var lenis = null;
+        if (typeof Lenis !== 'undefined') {
+            lenis = new Lenis({ duration: 1.4, easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); } });
+            (function tick(t) { lenis.raf(t); requestAnimationFrame(tick); })(0);
+        }
+
+        // SCROLL ANIMATIONS — only runs if GSAP CDN loaded
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+            ['.stat-item', '.service-card', '.portfolio-card', '.why-card'].forEach(function (sel) {
+                document.querySelectorAll(sel).forEach(function (el) {
+                    gsap.fromTo(el,
+                        { opacity: 0, y: 24 },
+                        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } }
+                    );
+                });
+            });
+            // Counters
+            document.querySelectorAll('.counter').forEach(function (el) {
+                gsap.to(el, {
+                    innerText: el.getAttribute('data-target'),
+                    duration: 2, snap: { innerText: 1 }, ease: 'power2.out',
+                    scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+                    onUpdate: function () { el.innerHTML = Math.ceil(this.targets()[0].innerText); }
+                });
+            });
+        }
+
+        // VIDEO MODAL
+        var modal = document.getElementById('video-modal');
+        var iframe = document.getElementById('video-frame');
+
+        function openVideo(fileId) {
+            iframe.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
+            modal.classList.add('active');
+            if (lenis) lenis.stop();
+        }
+        function closeVideo() {
+            modal.classList.remove('active');
+            setTimeout(function () { iframe.src = ''; }, 400);
+            if (lenis) lenis.start();
+        }
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeVideo(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeVideo(); });
+    </script>
+</body>
+</html>
